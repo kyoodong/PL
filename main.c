@@ -42,21 +42,31 @@ int main() {
 		}
 	}
 
-	printf("%d년", year);
-	for (int i = 0; i < 12; i++) {
-		printf("%d월\n일\t월\t화\t수\t목\t금\t토\n", i + 1);
+	for (int i = 0; i < 4; i++) {
+		printf("\n%d월\t\t\t\t\t\t\t\t", 3 * i + 1);
+		printf("%d월\t\t\t\t\t\t\t\t", 3 * i + 2);
+		printf("%d월\t\t\t\t\t\t\t\n", 3 * i + 3);
+		printf("일\t월\t화\t수\t목\t금\t토\t\t");
+		printf("일\t월\t화\t수\t목\t금\t토\t\t");
+		printf("일\t월\t화\t수\t목\t금\t토\t\n");
 		int j = 0;
 		do {
-			for (int k = 0; k < 7; k++) {
-				if (calendar[i][j] != 0) {
-					printf("%d\t", calendar[i][j]);
-				} else {
-					printf("\t");	
-				}	
-				j++;
+			int l = j;
+			for (int t = 0; t < 3; t++) {
+				l = j;
+				for (int k = 0; k < 7; k++) {
+					if (calendar[3 * i + t][l] != 0) {
+						printf("%d\t", calendar[3 * i + t][l]);
+					} else {
+						printf("\t");	
+					}	
+					l++;
+				}
+				printf("\t");
 			}
 			printf("\n");
-		} while (calendar[i][j] != 0);
+			j = l;
+		} while (calendar[3 * i][j] != 0 || calendar[3 * i + 1][j] || calendar[3 * i + 2][j]);
 	}
 	return 0;
 }
