@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
-int calendar[12][42];
+int** calendar;
+int* month;
 
-int numOfDayOfMonth[12] = {
-	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-};
+int* numOfDayOfMonth;
+	//31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 
 /**
  * 주어진 연 1월 1일이 무슨 요일인지 알려주는 함수
@@ -20,28 +21,64 @@ int getFirstDayOfYear(int year) {
  * 달력을 출력하는 프로그램
  */
 int main() {
+	calendar = malloc(sizeof(int *) * 12);
+	numOfDayOfMonth = malloc(sizeof(int) * 12);
+	month = numOfDayOfMonth;
+	*numOfDayOfMonth++ = 31;
+	*numOfDayOfMonth++ = 28;
+	*numOfDayOfMonth++ = 31;
+	*numOfDayOfMonth++ = 30;
+	*numOfDayOfMonth++ = 31;
+	*numOfDayOfMonth++ = 30;
+	*numOfDayOfMonth++ = 31;
+	*numOfDayOfMonth++ = 31;
+	*numOfDayOfMonth++ = 30;
+	*numOfDayOfMonth++ = 31;
+	*numOfDayOfMonth++ = 30;
+	*numOfDayOfMonth = 31;
+	numOfDayOfMonth = month;
+
+	int** tmp;
+	tmp = calendar;
+	for (int i = 0; i < 12; i++) {
+		*calendar = malloc(sizeof(int) * 43);
+		memset(*calendar, 0, sizeof(*calendar));
+		calendar++;
+	}
+	calendar = tmp;
 	int year;
 	printf("년도 입력 : ");
 	scanf("%d", &year);
 
 	int firstDay = getFirstDayOfYear(year);
 	int isLeapYear = (year % 4) == 0;
-	int month = 0;
 	int day = 0;
+	month = *calendar;
+	for (int i = 0; i < firstDay; i++)
+		month++;
+
 	for (int i = 0; i < 365; i++) {
-		calendar[month][firstDay + day] = day + 1;
+		*month = day + 1;
 		day++;
-		if (numOfDayOfMonth[month] <= day) {
-			if (month == 1 && isLeapYear) {
-				calendar[month][firstDay + day] = day + 1;	
+		month++;
+		if (*numOfDayOfMonth <= day) {
+			if (*month == 28 && isLeapYear) {
+				*month = day + 1;	
 				day++;
+				month++;
 			}
 			firstDay = (firstDay + day) % 7;
-			month++;
+			calendar++;
+			month = *calendar;
+			for (int i = 0; i < firstDay; i++)
+				month++;
+			numOfDayOfMonth++;
 			day = 0;
 		}
 	}
 
+	int** months;
+	calendar = tmp;
 	for (int i = 0; i < 4; i++) {
 		printf("\n%d월\t\t\t\t\t\t\t\t", 3 * i + 1);
 		printf("%d월\t\t\t\t\t\t\t\t", 3 * i + 2);
@@ -51,22 +88,27 @@ int main() {
 		printf("일\t월\t화\t수\t목\t금\t토\t\n");
 		int j = 0;
 		do {
-			int l = j;
+			months = tmp;
 			for (int t = 0; t < 3; t++) {
-				l = j;
+				month = *months;
 				for (int k = 0; k < 7; k++) {
-					if (calendar[3 * i + t][l] != 0) {
-						printf("%d\t", calendar[3 * i + t][l]);
+					if (*month != 0) {
+						printf("%d\t", *month);
 					} else {
 						printf("\t");	
-					}	
-					l++;
+					}
+					month++;	
 				}
+				*months = month;
+				months++;
 				printf("\t");
 			}
 			printf("\n");
-			j = l;
-		} while (calendar[3 * i][j] != 0 || calendar[3 * i + 1][j] || calendar[3 * i + 2][j]);
+			months = tmp;
+		} while (**months++ || **months++ || **months++);
+		tmp++;
+		tmp++;
+		tmp++;
 	}
 	return 0;
 }
