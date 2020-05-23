@@ -3,9 +3,16 @@
 #include <unistd.h>
 #include <sys/time.h>
 
+// 소수의 갯수
 int N;
+
+// 현재까지 구한 소수의 갯수
 int count;
+
+// 구해진 소수 모음
 int primes[10000];
+
+// 현재 평가중인 수가 소수인지 아닌지 표현
 int is_prime;
 
 int main(int argc, char *argv[]) {
@@ -14,11 +21,16 @@ int main(int argc, char *argv[]) {
 
 	printf("N = %d\n", N);
 
+	// 시간 측정 시작
 	gettimeofday(&start_tv, NULL);
 
+	// 2부터 소수인지 판별
 	int curValue = 2;
 	while (count < N) {
 		is_prime = 1;
+
+		// 1보다 크고 자기 자신보다 작은 정수로 나누어봤을 때
+		// 나누어진다면 소수가 아님
 		for (int i = 2; i < curValue; i++) {
 			if (curValue % i == 0) {
 				is_prime = 0;
@@ -40,6 +52,8 @@ int main(int argc, char *argv[]) {
 	}
 	printf("\n");
 	*/
+
+	// 끝나는 시간 측정
 	gettimeofday(&end_tv, NULL);
 
 	if (end_tv.tv_usec < start_tv.tv_usec) {
