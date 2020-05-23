@@ -29,10 +29,10 @@ int main(int argc, char *argv[]) {
 	while (count < N) {
 		is_prime = 1;
 
-		// 1보다 크고 자기 자신보다 작은 정수로 나누어봤을 때
+		// 자기 자신보다 작은 소수로 나누어봤을 때
 		// 나누어진다면 소수가 아님
-		for (int i = 2; i < curValue; i++) {
-			if (curValue % i == 0) {
+		for (int i = 0; i < count; i++) {
+			if (curValue % primes[i] == 0) {
 				is_prime = 0;
 				break;
 			}
